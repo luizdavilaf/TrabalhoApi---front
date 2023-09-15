@@ -1,14 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+//import { createStackNavigation } from '@react-navigation/stack';
+import LoginScreen from './src/screens/Login';
+import TelaPublica from './src/screens/TelaPublica';
+import TelaPrivada from './src/screens/TelaPrivada';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Card from './src/components/Card';
+import Button from './src/components/Button';
+import { useState } from 'react';
+import LoginContext, { LoginProvider } from './src/contexts/LoginContext';
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +18,46 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+//const Stack = createStackNavigation();
+
+const App = () => {
+
+  const [activeScreen, setActiveScreen] = useState('LoginScreen')
+  const goTo = (screenName) => {
+    setActiveScreen(screenName);
+  };
+  return (
+    <LoginProvider>
+      <View style={styles.container}>
+
+        {activeScreen === 'LoginScreen' && (
+          <LoginScreen goTo={goTo} />
+        )}
+
+        {activeScreen === 'TelaPublica' &&
+          <View>
+            <TelaPublica goTo={goTo} />            
+            <Button
+              title="Voltar"
+              onPress={() => setActiveScreen('LoginScreen')}
+            />
+          </View>
+        }
+
+        {activeScreen === 'TelaPrivada' &&
+          <View>
+            <TelaPrivada goTo={goTo} />
+            <Button
+              title="Voltar"
+              onPress={() => setActiveScreen('LoginScreen')}
+            />
+          </View>
+        }
+
+      </View>
+    </LoginProvider>
+  );
+};
+
+export default App;
